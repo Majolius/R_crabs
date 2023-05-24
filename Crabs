@@ -76,5 +76,12 @@ results2<-t(results)
 View(results2)
 help("dplyr-package")
 #use of dplyr
-Crabsrename(species=sp, Crabs, front_lobe=FL, Crabs, rear_width=RW, 
-              cara_lenght=CL,cara_width=CW, body_depth=BD, Crabs)
+
+Crabs<-Crabs %>% 
+  rename ("front_lobe"="FL", 
+          "rear_width"="RW", 
+          "cara_lenght"="CL",
+          "cara_width"="CW", 
+          "body_depth"="BD")
+str(Crabs)
+
