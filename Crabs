@@ -1,0 +1,80 @@
+setwd("C:/Users/59398/Documents/Master/IntroR/Crabs")
+getwd()
+library(MASS)
+library(dplyr)
+library(readxl)
+library(dplyr) 
+?crabs
+
+#######Leptograpsus variegatus Crabs###
+
+#write.csv(crabs, file="Crabs1.csv", header=TRUE) 
+#library(readr)
+#crabs1 <- read_csv("Crabs1.csv")
+
+Crabs<-read.csv("crabs.csv", header=TRUE)
+
+View(Crabs)
+
+colnames(Crabs)
+
+#x=numbers
+#sp=species= Blue |orange
+#Sex=sex = M|F
+#index 1:50 within each of the four groups.
+#Fl=Frontal lobe size (mm)
+#RW= Rear Width (mm)
+#Cl=Carapace lenght (mm)
+#CW=Carapace width(mm)
+
+#exploring the file
+
+class(Crabs)
+mode(Crabs)
+typeof(Crabs)
+
+
+#as the file is already as a table it will not be changed
+
+#exploring the dataset
+
+dim(Crabs)
+summary(Crabs)
+str(Crabs)
+
+# we should change x as character and SP and SEX as factor
+
+Crabs<-Crabs[-1]
+str(Crabs)
+
+Crabs$index<-as.character(Crabs$index)
+Crabs$sp<-as.factor(Crabs$sp)
+Crabs$sex<-as.factor(Crabs$sex)
+str(Crabs)
+
+#differentiate btw sp is CW and BD
+#differentiate btw Males and Females RW and CL
+
+results<-summarise(select(group_by(Crabs,sp), FL, RW, CL, CW,BD), 
+                    FL_min = min(FL, na.rm = TRUE), RW_min = min(RW, na.rm = TRUE),
+                    CL_min = min(CL, na.rm = TRUE), CW_min = min(CW, na.rm = TRUE),
+                    FL_max = max(FL, na.rm = TRUE), RW_max = max(RW, na.rm = TRUE),
+                    CL_max = max(CL, na.rm = TRUE), CW_max = max(CW, na.rm = TRUE),
+                    BD_min = min(BD, na.rm = TRUE), BD_max = max(BD, na.rm = TRUE),
+                    BD_q25 = quantile(BD, c(0.25), na.rm =TRUE) , BD_q50 = quantile(BD, c(0.5), na.rm =TRUE),
+                    BD_q75 = quantile(BD, c(0.75), na.rm =TRUE),
+                    FL_q25 = quantile(FL, c(0.25), na.rm = TRUE), RW_q25 = quantile(RW, c(0.25), na.rm = TRUE),
+                    CL_q25 = quantile(CL, c(0.25), na.rm = TRUE), CW_q25 = quantile(CW, c(0.25), na.rm = TRUE),
+                    FL_q50 = quantile(FL, c(0.5), na.rm = TRUE), RW_q5 = quantile(RW, c(0.5), na.rm = TRUE),
+                    CL_q50 = quantile(CL, c(0.5), na.rm = TRUE), CW_q5 = quantile(CW, c(0.5), na.rm = TRUE),
+                    FL_q75 = quantile(FL, c(0.75), na.rm = TRUE), RW_q75 = quantile(RW, c(0.75), na.rm = TRUE),
+                    CL_q75 = quantile(CL, c(0.75), na.rm = TRUE), CW_q75 = quantile(CW, c(0.75), na.rm = TRUE))
+
+
+View(results)
+results2<-t(results)
+View(results2)
+help("dplyr-package")
+#use of dplyr
+Crabsrename(species=sp, Crabs, front_lobe=FL, Crabs, rear_width=RW, 
+              cara_lenght=CL,cara_width=CW, body_depth=BD, Crabs)
