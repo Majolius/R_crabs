@@ -75,7 +75,46 @@ View(results)
 results2<-t(results)
 View(results2)
 help("dplyr-package")
+
+View(results)
+colnames(results)
+
+results1<-results %>% 
+  rename("front_lobe_min"="FL_min",
+          "front_lobe_max"="FL_max",
+          "front_lobe_q25"="FL_q25",
+          "front_lobe_q50"="FL_q50",
+          "front_lobe_q75"="FL_q75",
+          "rear_width_min"="RW_min", 
+          "rear_width_max"="RW_max",
+          "rear_width_q25"="RW_q25",
+          "rear_width_q50"="RW_q5",
+          "rear_width_q75"="RW_q75",
+          "cara_lenght_max"="CL_max",
+          "cara_lenght_min"="CL_min",
+          "cara_lenght_q25"="CL_q25",
+          "cara_lenght_q50"="CL_q50",
+          "cara_lenght_q75"="CL_q75",
+          "cara_width_max"="CW_max", 
+          "cara_width_min"="CW_min",
+          "cara_width_q25"="CW_q25",
+          "cara_width_q50"="CW_q5",
+          "cara_width_q75"="CW_q75",
+          "body_depth_max"="BD_max",
+          "body_depth_min"="BD_min",
+          "body_depth_q25"="BD_q25",
+          "body_depth_q50"="BD_q50",
+          "body_depth_q75"="BD_q75")
+
+#calculate the mean
+
 #use of dplyr
+results_mean<-summarise(select(group_by(Crabs, sp),  FL, RW, CL, CW,BD),
+                    FL_mean = mean(FL, na.rm = TRUE), RW_mean = mean(RW, na.rm = TRUE),
+                   CL_mean = mean(CL, na.rm = TRUE), CW_mean = mean(CW, na.rm = TRUE))
+                
+
+
 
 Crabs<-Crabs %>% 
   rename ("front_lobe"="FL", 
