@@ -4,6 +4,7 @@ library(MASS)
 library(dplyr)
 library(readxl)
 library(dplyr) 
+
 ?crabs
 
 #######Leptograpsus variegatus Crabs###
@@ -72,11 +73,6 @@ results<-summarise(select(group_by(Crabs,sp), FL, RW, CL, CW,BD),
 
 
 View(results)
-results2<-t(results)
-View(results2)
-help("dplyr-package")
-
-View(results)
 colnames(results)
 
 results1<-results %>% 
@@ -106,21 +102,49 @@ results1<-results %>%
           "body_depth_q50"="BD_q50",
           "body_depth_q75"="BD_q75")
 
+#use of dplyr
 #calculate the mean
 
-#use of dplyr
+
+
+#calculate the mean, median, standard deviation
+
+means <- sapply(Crabs[, c("FL", "RW", "CL", "CW", "BD")], mean)
+median <- sapply(Crabs[, c("FL", "RW", "CL", "CW", "BD")], median)
+range <- sapply(Crabs[, c("FL", "RW", "CL", "CW", "BD")], range)
+
 results_mean<-summarise(select(group_by(Crabs, sp),  FL, RW, CL, CW,BD),
                     FL_mean = mean(FL, na.rm = TRUE), RW_mean = mean(RW, na.rm = TRUE),
                    CL_mean = mean(CL, na.rm = TRUE), CW_mean = mean(CW, na.rm = TRUE))
-                
 
+results_mediam<-summarise(select(group_by(Crabs,sp),FL, RW, CL, CW,BD),
+                          FL_median = median(FL, na.rm = TRUE), RW_median = median(RW, na.rm = TRUE),
+                          CL_median = median(CL, na.rm = TRUE), CW_median = median(CW, na.rm = TRUE))
 
+results_range<-summarise(select(group_by(Crabs,sp),FL, RW, CL, CW,BD),
+                          FL_range = range(FL, na.rm = TRUE), RW_range = range(RW, na.rm = TRUE),
+                          CL_range = range(CL, na.rm = TRUE), CW_range = range(CW, na.rm = TRUE))
 
-Crabs<-Crabs %>% 
-  rename ("front_lobe"="FL", 
-          "rear_width"="RW", 
-          "cara_lenght"="CL",
-          "cara_width"="CW", 
-          "body_depth"="BD")
-str(Crabs)
+results_sd<-summarise(select(group_by(Crabs,sp),FL, RW, CL, CW,BD),
+                         FL_sd = sd(FL, na.rm = TRUE), RW_sd = sd(RW, na.rm = TRUE),
+                         CL_sd = sd(CL, na.rm = TRUE), CW_sd = sd(CW, na.rm = TRUE))
+#---------------------------------------------------------------------
+#differentiate btw sp is CW and BD
+#differentiate btw Males and Females RW and CL
 
+Crabs<-read.csv("crabs.csv", header=TRUE)
+
+colnames(Crabs)
+
+Sel1<-select(Crabs,"sex","RW","CL")
+Sel2<-select(Crabs,"sp","CW","BD")
+Crabs_F <- Crabs %>% filter(sex == "F") 
+Crabs_FO<- Crabs %>% filter(sex == "F", sp=="O") 
+Crabs_FB<- Crabs %>% filter(sex == "F", sp=="B") 
+Crabs_M <- Crabs %>%filter(sex=="M")
+Crabs_mO<- Crabs %>% filter(sex == "M", sp=="O") 
+Crabs_MB<- Crabs %>% filter(sex == "M", sp=="O") 
+
+Morfo<-select(Crabs,"sp","FL", "RW", "CL", "CW", "BD")
+
+RW_cm<-Crabs %>% mutate(RW_new= RW*10)
