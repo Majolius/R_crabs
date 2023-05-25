@@ -136,8 +136,8 @@ Crabs<-read.csv("crabs.csv", header=TRUE)
 
 colnames(Crabs)
 
-Sel1<-select(Crabs,"sex","RW","CL")
-Sel2<-select(Crabs,"sp","CW","BD")
+Sel1<-select(Crabs,"RW","CL")
+Sel2<-select(Crabs,"CW","BD")
 Crabs_F <- Crabs %>% filter(sex == "F") 
 Crabs_FO<- Crabs %>% filter(sex == "F", sp=="O") 
 Crabs_FB<- Crabs %>% filter(sex == "F", sp=="B") 
@@ -148,3 +148,45 @@ Crabs_MB<- Crabs %>% filter(sex == "M", sp=="O")
 Morfo<-select(Crabs,"sp","FL", "RW", "CL", "CW", "BD")
 
 RW_cm<-Crabs %>% mutate(RW_new= RW*10)
+
+####------------------------------
+library(ggplot2)
+
+h1<-ggplot(Crabs, aes(x = FL)) +
+  geom_histogram(binwidth = 0.5, fill = "deepskyblue4", color = "black") +
+  labs(x = "Frontal Lobe (mm)", y = "Frequency", title = "Histogram of Variable FL") + geom_density(alpha=.2, fill="black")
+
+
+h2<-ggplot(Crabs, aes(x = RW)) +
+  geom_histogram(binwidth = 0.5, fill = "red", color = "black") +
+  labs(x = "Rear Width (mm)", y = "Frequency", title = "Histogram of Variable RW") + geom_density(alpha=.2, fill="black")
+
+
+h3<-ggplot(Crabs, aes(x = CL)) +
+  geom_histogram(binwidth = 0.5, fill = "green", color = "black") +
+  labs(x = "Carapace Length (mm)", y = "Frequency", title = "Histogram of Variable CL") + geom_density(alpha=.2, fill="black")
+
+
+h4<-ggplot(Crabs, aes(x = CW)) +
+  geom_histogram(binwidth = 0.5, fill = "yellow", color = "black") +
+  labs(x = "Carapace Width (mm)", y = "Frequency", title = "Histogram of Variable CW") + geom_density(alpha=.2, fill="black")
+
+
+h5<-ggplot(Crabs, aes(x = BD)) +
+  geom_histogram(binwidth = 0.5, fill = "orange", color = "black") +
+  labs(x = "Body Depth (mm)", y = "Frequency", title = "Histogram of Variable BD") + geom_density(alpha=.2, fill="black")
+
+library(gridExtra)
+
+grid.arrange(h1,h2,h3,h4,h5, ncol=3, nrow = 2)
+
+# Scatter Plot
+
+# Plot a scatter plot of two variables "CL" and "CW"
+ggplot(Crabs, aes(x = CL, y = CW)) + geom_point() +  labs(x = "Carapace Length (mm)", y = "Carapace Width (mm)", title = "Scatter Plot of CL and CW") + geom_point(aes(col=sp), size=3) + geom_smooth(method="lm")
+
+# BOXPLOT
+ggplot(deh, aes(y=BD)) + geom_boxplot()
+ggplot(deh, aes(y=BD)) + geom_boxplot(outlier.colour="red", outlier.shape=16, outlier.size=2, notch=T)
+ggplot(deh, aes(y=BD, color=sp)) + geom_boxplot()
+
